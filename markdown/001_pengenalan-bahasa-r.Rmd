@@ -1,0 +1,341 @@
+---
+title: "Modul 1: Pengenalan Bahasa R"
+author: "Muhammad Apriandito - Technaut Education"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+# Set Knit
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+
+## Selamat Datang di R
+Di modul ini kita akan belajar dasar - dasar pemrograman R. Seperti yang sudah dijelaskan, ada beberapa tipe file R yang dapat digunakan untuk menjalankan kodingan R yaitu: R script dan R Markdown. Keseluruhan modul ini akan menggunakan tipe format R Markdown. Dengan format R Markdown, code R dijalankan pada cell yang dikatakan "chunk". Untuk menambahkan chunk, kita dapat menggunakan tab "insert" atau menekan tombol ```ctrl + alt + i``` untuk windows atau ```command + alt + i``` untuk mac. 
+
+```{r}
+# Ini adalah chunk
+print("ini adalah chunk")
+```
+
+Sekarang kamu sudah mengetahui cara menuliskan dan menjalankan kode R. Mari kita mulai berkenalan lebih lanjut dengan R.
+
+## Operasi Aritmatik
+Seperti bahasa  pemrograman lainnya, R dapat  melakukan operasi matematika seperti: pertambahan, pengurangan, perkalian, dan lainnya. 
+
+```{r}
+# Pertambahan
+5 + 5
+```
+
+```{r}
+# Pengurangan
+5 - 5
+```
+
+```{r}
+# Perkalian
+3 * 5
+```
+
+```{r}
+# Pembagian
+5 / 2
+```
+
+```{r}
+# Pangkat
+2^5
+```
+
+```{r}
+# Modulo
+28 %% 6
+```
+
+## Variable Assignment
+R memungkinkan kita untuk menyimpan nilai dalam bentuk variable. Untuk melakukannya, kita dapat menggunakan perintah  ```<-``` atau ```=```.
+
+```{r}
+# Contoh membuat variabel dengan  "<-"
+contoh_variabel <- 4
+
+# Print nilai variabel
+print(contoh_variabel)
+```
+
+```{r}
+# Contol membuat variabel dengan  "="
+contoh_variabel_2 = 2
+```
+
+```{r}
+# Contoh penggunaan variabel
+harga <- 2000
+kuantitas <- 3
+
+jumlah_kuantitas <- harga * kuantitas
+print(jumlah_kuantitas)
+```
+
+## Tipe Data
+R memiliki 5 tipe data utama yaitu:
+- Numeric
+- Integer
+- Character
+- Logical
+- Complex
+
+Berikut contoh masing-masing tipe data
+
+### Numeric
+```{r}
+# Contoh tipe data numerik
+n <- 1.2
+
+# Melihat tipe data
+class(n)
+```
+
+### Integer
+```{r}
+# Contoh tipe data Integer
+i <- 2L
+
+# Melihat tipe data
+class(i)
+```
+
+```{r}
+# Mengkonversi data numerik menjadi integer
+i_from_n <- as.integer(n)
+
+# Melihat nilai
+print(i_from_n)
+
+# Melihat tipe data
+class(i_from_n)
+```
+
+### Character
+```{r}
+# Contoh tipe data character
+c <- "SBM - ITB"
+
+# Melihat tipe data
+class(c)
+```
+
+### Logical
+```{r}
+# Contoh tipe data character
+l <- TRUE
+
+# Melihat tipe data
+class(l)
+```
+
+### Complex
+```{r}
+# Contoh tipe data complex
+com <- 3 + 2i
+
+# Melihat tipe data
+class(com)
+```
+
+## Struktur Data
+R memiliki beberapa struktur data yaitu:
+- Vectors
+- Lists
+- Matrices
+- Arrays
+- Factors
+- Data Frames
+
+Berikut contoh masing-masing struktur data
+
+### Vektor 
+```{r}
+# Contoh Vektor
+v <- c(1, 2, 3)
+class(v)
+```
+
+### List
+```{r}
+l <- list(1, "a", TRUE, 1 + 4i)
+class(l)
+```
+
+### Matrix 
+```{r}
+# Contoh Matrix
+m <- matrix(c(1:3))
+class(m)
+```
+
+### Factor
+```{r}
+# Contoh Factor
+f <- factor(c("Fashion", "Kuliner", "Media", "Otomotif", "Media", "Kuliner"))
+class(f)
+```
+
+### Dataframe
+```{r}
+df <- data.frame(
+  Nama = c("Aditya", "Ayush", "Akshay"),
+  Usia = c(26, 26, 27),
+  BB = c(81, 85, 90),
+  Tinggi = c(157,186, 165),
+  Salary = c(5000, 6000, 7500)
+)
+
+class(df)
+```
+
+## Fungsi
+Fungsi merupakan sekumpulan baris perintah atau kode yang disusun secara bersama-sama untuk melakukan tugas tertentu. Dalam R, kita dapat menggunakan fungsi bawaan atau membuat fungsi yang baru.
+
+### Fungsi Bawaan
+```{r}
+# Membuat Vektor Usia
+usia <- c(22, 23, 21, 8, 10, 14, 15)
+
+# Menghitung rata-rata usia
+mean(usia)
+```
+
+### Membuat Fungsi
+
+#### Contoh Fungsi Menghitung BMI
+```{r}
+# Membuat fungsi untuk mengitung BMI
+hitung_bmi <- function(tinggi, berat) {
+  return(berat / (tinggi^2))
+}
+```
+
+```{r}
+# Menggunakan fungsi BMI yang sudah dibuat
+hitung_bmi(tinggi = 1.57, berat = 63)
+```
+
+#### Contoh Fungsi Menghitung Return of Investment
+```{r}
+# Membuat fungsi untuk mengitung Returm of Imvestment
+roi <- function(total_pendapatan, biaya, investasi_awal) {
+  return(((total_pendapatan - biaya)/investasi_awal)*0.1)
+}
+```
+
+```{r}
+# Menggunakan fungsi ROI yang sudah dibuat
+roi(175, 75, 75)
+```
+## Percabangan 
+Percabangan merupakan fitur pemrograman untuk melakukan tindakan/perintah yang berbeda untuk setiap kondisi boolean yang ditentukan. Berikut ini merupakan contoh-contoh percabangan
+
+### If Statement
+```{r}
+daftar_pelanggan <- c("Andi", "Joko", "Budi")
+
+pelanggan <- "Agnes"
+
+if (pelanggan %in% daftar_pelanggan) {
+print(paste0(pelanggan, " Ada didalam daftar pelanggan"))
+}
+```
+
+### Else Statement
+
+```{r}
+# Contoh Else Statement
+
+if (pelanggan %in% daftar_pelanggan) {
+  print(paste0(pelanggan, " Tidak ada didalam daftar pelanggan"))
+} else {
+  print(paste0(pelanggan, " Tidak ada didalam daftar pelanggan"))
+}
+```
+
+### If-Else Statement
+```{r}
+# Contoh If Else Statement
+
+daftar_pelanggan_churn <- c("Agnes", "Mawar")
+
+if (pelanggan %in% daftar_pelanggan) {
+  print(paste0(pelanggan, " Ada ada didalam daftar pelanggan"))
+} else if (pelanggan %in% daftar_pelanggan_churn) {
+  print(paste0(pelanggan, " Ada ada didalam daftar pelanggan yang sudah berhenti berlangganan"))
+} else {
+  print(paste0(pelanggan, " Tidak ada didalam daftar pelanggan"))
+}
+```
+## Perulangan atau Loop
+Perulangan atau loop merupakan sebuah perintah dibuat untuk mengulang secara menerus hingga suatu kondisi tercapai. Ada 2 tipe loop yang umum digunakan yaitu for loop dan while loop. 
+
+### For Loop
+```{r}
+harga_barang  <- c(2000, 3000, 4000)
+for (i in harga_barang) {
+  harga_asli <- i - 1000
+  print(paste0("Harga Asli = ", harga_asli ))
+}
+```
+
+### While Loop
+```{r}
+stock <- 10
+
+while (stock > 0) {
+  print(paste0("Jumlah stock = ", stock))
+  stock <- stock - 1
+}
+```
+
+## Package
+R Package merupakan kumpulan fungsi/function atau data yang ada di R. Terdapat banyak packages yang dibuat/dikembangkan oleh pengguna lainnya. Berikut contoh-contoh package yang umum digunakan. Untuk dapat menggunakan fungsi yang ada pada suatu package, kita harus menginstall dan memuat packagenya terlebih dahulu. 
+
+### Readr
+Package readr berguna untuk mengimport data dengan format .csv atau format lain kedalam environtment R.
+
+```{r}
+# Install package
+install.packages("readr")
+```
+
+```{r}
+# Load package
+library(readr)
+```
+
+```{r}
+# Mengimport Dataset "iris.csv" dari direktori "data/raw"
+df_csv <- read_csv("data/raw/iris.csv")
+```
+
+### Readxl
+Package readxl berguna untuk mengimport data dengan format .xlsx atau .xls kedalam environtment R.
+
+```{r}
+# Install package
+install.packages("readxl")
+```
+
+```{r}
+# Load package
+library(readxl)
+```
+
+```{r}
+# Mengimport Dataset "iris.xlsx" dari direktori "data/raw"
+df_xlsx <- read_xlsx("data/raw/iris.xlsx")
+```
+
