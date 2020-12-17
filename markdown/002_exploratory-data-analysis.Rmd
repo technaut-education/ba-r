@@ -1,0 +1,233 @@
+---
+title: "Modul 2: Exploratory Data Analysis"
+author: "Muhammad Apriandito - Technaut Education"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+# Set Knit
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+
+Exploratory Data Analysis (EDA) merupakan proses eksplorasi data yang bertujuan untuk memahami isi dan komponen penyusun data. Ada banyak teknik yang dapat digunakan untuk mengekplorasi data, namun tidap ada prosedur tetap dalam melakukannya. Semakin banyak kita dapat mengumpulkan informasi dari data yang akan diolah, maka semakin baik pula pemahaman kita terhadapnya. 
+
+Pada praktek kali ini kita akan belajar untuk melakukan EDA data menggunakan Package  ```dplyr```.  Package yang dikembangkan oleh Hadley Wickham dan Roman Francois ini menyediakan banyak fungsi yang mudah digunakan untuk melakukan transformasi data. Karena tujuannya untuk melakukan transformasi data, Package ```dplyr``` ini menjadi sangat berguna pda tahap analisis dan eksplorasi data. 
+
+Sebelum dapat digunakan, Package ```dplyr``` harus kita install dan load terlebih dulu.
+
+```{r eval=FALSE, include=TRUE}
+# Install package
+install.packages("dplyr")
+```
+
+```{r message=FALSE, warning=FALSE}
+# Load package
+library("dplyr")
+```
+
+## Import Data
+
+Untuk melakukan EDA, kita harus memiliki data yang akan eksplorasi. Dataset yang akan kita gunakan di modul kali ini yaitu dataset Bank Marketing yang didapatkan dari Kaggle. Dataset Bank Marketing berisi informasi terkait Marketing Campaign sebuah Bank di Portugis. Tujuan dari Marketing Campaign ini yaitu untuk menawarakan deposito berjangka (Term Deposit) kepada para nasabah. Informasi lengkap mengenai dataset ini dapat dilihat melalui [Kaggle](https://www.kaggle.com/henriqueyamahata/bank-marketing). Para modul ini, dataset tersebut sudah didownload dan disimpan pada directory ```data/raw```. 
+
+Untuk memulai, mari kita import datanya terlebih dulu. Karena kita sudah menginstall ```readr``` di modul sebelumnya, kita tidak perlu menginstalnya kembali. Dengan demikian, kita cukup me-load/memuat packagenya. 
+
+```{r}
+# Load package readr
+library(readr)
+```
+
+```{r message=FALSE, warning=FALSE}
+# Import data bank-marketing.csv dari direktori data/raw
+df <- read_csv2("data/raw/bank-marketing.csv")
+```
+
+Pada tahap ini, data yang kita inginkan sudah ter-import dalam environment R. Kita dapat melihat 5 baris pertama data kita dengan menggunakan fungsi ```head()```.
+
+```{r}
+# Meampilkan 5 baris pertama data
+head(df)
+```
+
+## Fungsi umum pada dplyr
+
+Package ```dplyr``` menyediakan banyak fungsi yang dapat digunakan untuk melakukan EDA. Di modul ini kita akan belajar beberapa fungsi-fungsi umum dari Package ```dplyr```
+
+### Glimpse
+Fungsi yang pertama akan kita pelajari adalah fungsi ```glimpse()```. Fungsi ```glimpse()``` berfungsi untuk menampilkan rangkuman informasi tentang keadaan data yang kita miliki, mirip seperti fungsi ```str()```. 
+
+Informasi yang ditampilkan meliputi jumlah observasi (Jumlah baris dan jumlah variabel/kolom), tipe variabel, dan beberapa contoh data.
+
+```{r}
+# Glimpse
+glimpse(df)
+```
+
+### Select
+Fungsi selanjutnya adalah fungsi ```select```. Fungsi ```select``` digunakan untuk mengambil satu atau beberapa variabel tertentu dari suatu dataframe. Contohnya, kita akan mengambil variable "age" dan "job" serta informasi apakah nasabah tersebut berlangganan deposito berjangka atau tidak, dari dataset yang sudah kita impor.
+
+```{r}
+# Select variabel "age" dan "job"
+df_select <- select(df, c("age", "job", "y"))
+
+# Menampilkan 5 baris pertama data
+head(df_select)
+```
+
+Contoh lainnya kita juga dapat mengambil variable "age" dan "marital".
+
+```{r}
+# Select Variabel "age" dan "marital"
+df_usia_nikah <- select(df, c("age", "marital"))
+
+# Menampilkan 5 baris pertama data
+head(df_usia_nikah)
+```
+
+### Filter
+Fungsi ```filter()``` digunakan untuk menyeleksi dan menampilkan data sesuai dengan ketentuan yang diberikan. Contoh kita akan memfilter data nasabah yang memiliki pekerjaan sebagai admin, atau memfilter nasabah yang berlangganan deposito berjangka.
+
+```{r}
+# Filter job = Admin
+df_filter <- filter(df, job == "admin.")
+
+# Menampilkan 5 baris pertama data
+head(df_filter)
+```
+
+```{r}
+# Filter y = yes
+df_married <- filter(df, y == "yes")
+
+# Menampilkan 5 baris pertama data
+head(df_married)
+```
+
+### Mutate
+Fungsi ```mutate()``` dapat digunakan untuk memodifikasi atau menambahkan variabel baru. Variabel baru tersebut dapat berupa variabel kategorik maupun numerik. Contohnya, kita akan membuat variable baru yang berisikan rasio ```usia/jumlah saldo tabungan``` untuk masing-masing nasabah.
+
+```{r}
+# Membuat variabel baru menggunakan fungsi mutate()
+df_mutate <- mutate(df, balance_ratio = balance / age)
+
+# Menampilkan 5 baris pertama data
+head(df_mutate)
+```
+
+### Sampling
+Fungsi ini digunakan untuk mengambil sample secara acak pada data. Fungsi ```sample_n()``` digunakan untuk mengambil sampel sejumlah nilai n yang ditentukan. Contoh kita akan mengambil sample sebanyak 100 dari data. 
+
+```{r}
+# Mengambil 100 baris sample data
+df_sample <- sample_n(df, 100)
+
+# Menampilkan 5 baris pertama data
+head(df_sample)
+
+# Menampilkan dimensi data
+dim(df_sample)
+```
+
+### Summarize
+Fungsi ```summarise()``` digunakan untuk meringkas beberapa nilai data menjadi satu nilai. Fungsi ini akan menjadi sangat berguna apabila digabungkan dengan fungsi lain dalam ```dplyr```. Fungsi summarise yang dapat digunakan meliputi ```mean()```, ```median()```, ```sd()```,  ```min()```, ```max()```, ```quantile()```, ```first()```, ```last()```. Contoh kita akan menghitung rata-rata usia nasabah.
+
+```{r}
+# Menghitung rata-rata nilai variabel "age"
+df_summarise <- summarise(df, mean(age))
+
+# Menampilkan 5 baris pertama data
+print(df_summarise)
+```
+
+### Arrange
+Fungsi ```arrange()``` berguna untuk mengurutkan data berdasarkan nilai. Variabel yang menjadi acuan pengurutan dapat berjumlah lebih dari satu. Selain itu, kita juga dapat menentukan jenis urutan: dari besar ke kecil atau dari kecil ke besar. Contohnya, kita akan mengurutkan data berdasarkan usia. 
+
+```{r}
+# Mengurutkan data berdasarkan "age"
+df_arrange <- arrange(df, age)
+
+# Menampilkan 5 baris pertama data
+head(df_arrange)
+```
+
+### Pipe 
+Fungsi ini menggunakan notasi ```%>%``` yang berguna untuk membuat fungsi berantai atau fungsi terus menerus. Fungsi pipe memungkinkan kita menuliskan lebih dari satu fungsi sekaligus tanpa harus menyimpan hasilnya terlebih dahulu. Contohnya, kita akan mencari nilai rata-rata saldo tabungan dari nasabah yang berlangganan deposito berjangka dan yang tidak
+
+```{r}
+# Menggunakan pipe untuk mengetahui saldo rata-rata pelanggan yang berlangganan deposito berjangka
+df_pipe <- df %>%
+  filter(y == "yes") %>%
+  summarise(mean(balance))
+
+print(df_pipe)
+```
+
+```{r}
+# Menggunakan pipe untuk mengetahui saldo rata-rata pelanggan yang tidak berlangganan deposito berjangka
+df_pipe <- df %>%
+  filter(y == "no") %>%
+  summarise(mean(balance))
+
+print(df_pipe)
+```
+
+## Praktek
+Kita sudah memahami teknik-teknik umum yang tersedia pada Package ```dplyr```. Sekarang saatnya kita meangaplikasikan teknik - teknik ini pada kasus yang baru. Kita akan menggunakan dataset Telco Customer Churn yang tersedia di Kaggle. Dataset ini berisi informasi profil pelanggan dari suatu perusahaan telekomunikasi. Mari kita import datanya terlebih dahulu. 
+
+```{r}
+# Import Customer Churn Dataset
+df_churn <- read_csv("data/raw/customer-churn.csv")
+```
+
+### Soal  
+Pada praktik ini, teman-teman akan berperan sebagai seorang data scientist di perusahaan telekomunikasi tersebut dan bertugas untuk menjawab pertanyaan-pertanyaan yang ajukan oleh manajemen berdasarkan data yang telah tersedia menggunakan Package ```dplyr```.
+
+#### Contoh Soal: Berapa jumlah pelanggan yang churn? 
+```{r}
+# Jawaban
+df_churn %>%
+  filter(Churn == "Yes") %>%
+  count()
+```
+
+#### Soal 1: Berapa jumlah pelanggan yang tidak churn?
+```{r}
+# Jawaban soal 1
+
+```
+
+#### Soal 2: Carilah 5 pelanggan dengan jumlah tagihan tertinggi?
+```{r}
+# Jawaban soal 2
+
+```
+
+#### Soal 3: Carilah daftar pelanggan yang telah churn sebelum 3 bulan berlangganan
+```{r}
+# Jawaban soal 3
+
+```
+
+#### Soal 4: Carilah daftar pelanggan yang berlangganan layanan telepon
+```{r}
+# Jawaban soal 4
+
+```
+
+#### Soal 5: Carilah rata-rata tagihan bulanan bagi pelanggan yang churn dan bagi pelanggan yang tidak churn
+```{r}
+# Jawaban soal 5
+
+```
+
+## Tambahan 
+Kita dapat melakukan EDA dengan package-package lain seperti skimr, datamaid, summarytool. Cobalah salah satu dari package tersebut. 
+
+```{r}
+
+```
+
