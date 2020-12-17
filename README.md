@@ -1,2 +1,2 @@
-# ba-r
-Materi Business Analytics with R - Technaut Education
+# Materi Business Analytics Menggunakan R
+Oleh Technaut Education
